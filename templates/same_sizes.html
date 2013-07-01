@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Files with same sizes in {{ root }}</title>
+	</head>
+	<body>
+		<h1>Files with same sizes in {{ root }}</h1>
+
+		{% for dupegroup in dupes %}
+			<h2>{{ dupegroup.size|filesizeformat }}</h2>
+
+			<ul>
+				{% for filesize in dupegroup.filesizes %}
+					<li>{{ filesize.path }}</li>
+				{% endfor %}
+			</ul>
+		{% endfor %}
+
+	</body>
+</html>
