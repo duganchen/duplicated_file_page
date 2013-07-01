@@ -15,7 +15,7 @@ def dupes():
 
     settings = None
 
-    with open('settings.yaml') as f:
+    with open(os.path.join(os.path.dirname(__file__), 'settings.yaml')) as f:
         settings = yaml.load(f)
 
     assert settings is not None
