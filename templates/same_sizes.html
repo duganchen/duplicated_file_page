@@ -8,10 +8,10 @@
 		<h1>Files with same sizes in {{ root }}</h1>
 
 		{% for dupegroup in dupes %}
-			<h2>{{ dupegroup.size|filesizeformat }}</h2>
+			<h2>{{ dupegroup.key|filesizeformat }}</h2>
 
 			<ul>
-				{% for filesize in dupegroup.filesizes %}
+				{% for filesize in dupegroup.filekeys %}
 					<li>{{ filesize.path }}</li>
 				{% endfor %}
 			</ul>

@@ -22,34 +22,34 @@ def dupes():
     assert 'path' in settings
     assert os.path.isdir(settings['path'])
 
-    file_sizes = iter_sizes(settings['path'])
-    get_size = lambda filesize: filesize.size
-    file_sizes = sorted(file_sizes, key=get_size, reverse=True)
-    size_groups = itertools.groupby(file_sizes, key=get_size)
-    dupes = iter_dupes(size_groups)
+    key = lambda path: os.path.getsize(path)
+    file_keys = iter_keys(settings['path'], key=key)
+    get_key = lambda filekey: filekey.key
+    file_keys = sorted(file_keys, key=get_key, reverse=True)
+    key_groups = itertools.groupby(file_keys, key=get_key)
+    dupes = iter_dupes(key_groups)
     return flask.render_template('same_sizes.html', root=settings['path'],
                                  dupes=dupes)
 
 
-def iter_sizes(path):
+def iter_keys(path, key):
     for root, _, files in os.walk(path):
         for filepath in files:
             path = os.path.join(root, filepath)
-            yield FileSize(size=os.path.getsize(path),
-                           path=path.decode('utf-8'))
+            yield FileKey(key=key(path),
+                          path=path.decode('utf-8'))
 
 
-def iter_dupes(size_groups):
+def iter_dupes(key_groups):
 
-    for size, path_group in size_groups:
-        filesizes = tuple(path_group)
-        if len(filesizes) > 1:
-            yield SizeGroup(size, filesizes)
+    for key, path_group in key_groups:
+        filekeys = tuple(path_group)
+        if len(filekeys) > 1:
+            yield KeyGroup(key, filekeys)
 
 
-FileSize = collections.namedtuple('FileSize', ('size', 'path'))
-
-SizeGroup = collections.namedtuple('SizeGroup', ('size', 'filesizes'))
+FileKey = collections.namedtuple('FileKey', ('key', 'path'))
+KeyGroup = collections.namedtuple('KeyGroup', ('key', 'filekeys'))
 
 
 if __name__ == '__main__':
