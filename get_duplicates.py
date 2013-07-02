@@ -12,7 +12,7 @@ app = flask.Flask(__name__)
 
 
 @app.route('/')
-def same_duplicates():
+def same_files():
 
     settings = None
 
