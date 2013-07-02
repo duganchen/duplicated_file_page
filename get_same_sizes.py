@@ -10,9 +10,12 @@ import yaml
 app = flask.Flask(__name__)
 
 
-@app.route('/')
-def dupes():
+@app.route('/sizes')
+def same_sizes():
+    return get_duplicates(template='same_sizes.html', key=os.path.getsize)
 
+
+def get_duplicates(template, key):
     settings = None
 
     with open(os.path.join(os.path.dirname(__file__), 'settings.yaml')) as f:
@@ -22,13 +25,12 @@ def dupes():
     assert 'path' in settings
     assert os.path.isdir(settings['path'])
 
-    key = lambda path: os.path.getsize(path)
     file_keys = iter_keys(settings['path'], key=key)
     get_key = lambda filekey: filekey.key
     file_keys = sorted(file_keys, key=get_key, reverse=True)
     key_groups = itertools.groupby(file_keys, key=get_key)
     dupes = iter_dupes(key_groups)
-    return flask.render_template('same_sizes.html', root=settings['path'],
+    return flask.render_template(template, root=settings['path'],
                                  dupes=dupes)
 
 
