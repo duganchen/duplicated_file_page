@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Files with same {{ keys }} in {{ root }}</title>
+	</head>
+	<body>
+		<h1>Files with same {{ keys }} in {{ root }}</h1>
+
+		{% for dupegroup in dupes %}
+			<hr>
+			<ul>
+				{% for filekey in dupegroup.filekeys %}
+					<li>{{ filekey.path }}</li>
+				{% endfor %}
+			</ul>
+		{% endfor %}
+
+	</body>
+</html>
